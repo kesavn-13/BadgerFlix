@@ -29,8 +29,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        # Add your production frontend URL here:
-        # "https://your-app.vercel.app",
+        "https://badger-flix.vercel.app",
+        "https://badger-flix-gm4o.vercel.app",
+        "https://*.vercel.app",  # Allow all Vercel deployments
     ],
     allow_credentials=True,
     allow_methods=["*"],
