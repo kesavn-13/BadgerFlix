@@ -89,13 +89,15 @@ def transcribe_audio(file_path: str) -> str:
         if audio_file.state.name == "FAILED":
             raise Exception("File processing failed")
         
+        # Create model with safety disabled
+        model_with_safety = genai.GenerativeModel(model_name, safety_settings=SAFETY_SETTINGS)
+        
         # Generate transcript with safety settings disabled
-        response = model.generate_content(
+        response = model_with_safety.generate_content(
             [
                 "Transcribe this audio file word-for-word. Return only the transcript text, no additional commentary, no timestamps, just the spoken words.",
                 audio_file
-            ],
-            safety_settings=SAFETY_SETTINGS
+            ]
         )
         
         # Handle response format
@@ -172,10 +174,15 @@ Requirements:
 """
 
     try:
-        response = model.generate_content(
-            prompt, 
-            generation_config=generation_config,
+        # Create model instance with safety settings explicitly disabled
+        model_with_safety = genai.GenerativeModel(
+            model_name,
             safety_settings=SAFETY_SETTINGS
+        )
+        
+        response = model_with_safety.generate_content(
+            prompt, 
+            generation_config=generation_config
         )
         
         # Handle different response formats from Gemini
@@ -298,10 +305,10 @@ If the question is not related to the episode content, politely redirect the stu
             "max_output_tokens": 1024,
         }
         
-        response = model.generate_content(
+        model_with_safety = genai.GenerativeModel(model_name, safety_settings=SAFETY_SETTINGS)
+        response = model_with_safety.generate_content(
             prompt,
-            generation_config=generation_config,
-            safety_settings=SAFETY_SETTINGS
+            generation_config=generation_config
         )
         
         # Handle different response formats from Gemini
@@ -374,7 +381,8 @@ Return ONLY the JSON array, no other text.
             "max_output_tokens": 2048,
         }
         
-        response = model.generate_content(prompt, generation_config=generation_config)
+        model_with_safety = genai.GenerativeModel(model_name, safety_settings=SAFETY_SETTINGS)
+        response = model_with_safety.generate_content(prompt, generation_config=generation_config)
         
         # Handle different response formats
         if hasattr(response, 'text') and response.text:
@@ -467,7 +475,8 @@ Return ONLY the JSON array, no other text.
             "max_output_tokens": 2048,
         }
         
-        response = model.generate_content(prompt, generation_config=generation_config)
+        model_with_safety = genai.GenerativeModel(model_name, safety_settings=SAFETY_SETTINGS)
+        response = model_with_safety.generate_content(prompt, generation_config=generation_config)
         
         # Handle different response formats
         if hasattr(response, 'text') and response.text:
@@ -559,7 +568,8 @@ Return ONLY the JSON array, no other text.
             "max_output_tokens": 2048,
         }
         
-        response = model.generate_content(prompt, generation_config=generation_config)
+        model_with_safety = genai.GenerativeModel(model_name, safety_settings=SAFETY_SETTINGS)
+        response = model_with_safety.generate_content(prompt, generation_config=generation_config)
         
         # Handle different response formats
         if hasattr(response, 'text') and response.text:

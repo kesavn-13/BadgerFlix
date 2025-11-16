@@ -1,52 +1,55 @@
-# 🚀 BadgerFlix Deployment Guide
+# Deployment Guide
 
-## Deployment Options
+## Overview
 
-### Option 1: Vercel (Frontend) + Railway/Render (Backend) - RECOMMENDED
+BadgerFlix requires separate deployments for frontend and backend services.
 
-#### Frontend (Vercel - Free)
-1. Push your code to GitHub
-2. Go to https://vercel.com
+## Frontend Deployment (Vercel)
+
+1. Push code to GitHub
+2. Go to [vercel.com](https://vercel.com)
 3. Import your repository
-4. Set root directory to `frontend`
-5. Add environment variable:
-   - `NEXT_PUBLIC_API_URL` = Your backend URL (e.g., `https://your-backend.railway.app`)
-6. Deploy!
+4. Configure:
+   - **Root Directory**: `frontend`
+   - **Framework**: Next.js (auto-detected)
+   - **Environment Variable**: `NEXT_PUBLIC_API_URL` = your backend URL
+5. Deploy
 
-#### Backend (Railway - Free tier available)
-1. Go to https://railway.app
+## Backend Deployment (Railway)
+
+1. Go to [railway.app](https://railway.app)
 2. New Project → Deploy from GitHub
 3. Select your repository
-4. Set root directory to `backend`
-5. Add environment variables:
-   - `GEMINI_API_KEY` = Your Gemini API key
-6. Railway will auto-detect Python and install dependencies
-7. Set start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+4. Configure:
+   - **Root Directory**: `backend`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - **Environment Variable**: `GEMINI_API_KEY` = your API key
+5. Copy the generated URL
+6. Update frontend `NEXT_PUBLIC_API_URL` with this URL
 
-#### Backend (Render - Alternative)
-1. Go to https://render.com
+## Backend Deployment (Render - Alternative)
+
+1. Go to [render.com](https://render.com)
 2. New Web Service → Connect GitHub
-3. Set:
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-4. Add environment variable: `GEMINI_API_KEY`
-5. Deploy!
+3. Configure:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - **Environment Variable**: `GEMINI_API_KEY`
+4. Deploy
 
-### Option 2: Netlify (Frontend) + Fly.io (Backend)
+## CORS Configuration
 
-#### Frontend (Netlify)
-1. Build command: `cd frontend && npm run build`
-2. Publish directory: `frontend/.next`
-3. Add environment variable: `NEXT_PUBLIC_API_URL`
+After deployment, update `backend/main.py` CORS settings to include your frontend URL:
 
-#### Backend (Fly.io)
-1. Install Fly CLI: `curl -L https://fly.io/install.sh | sh`
-2. `fly launch` in backend directory
-3. Add secrets: `fly secrets set GEMINI_API_KEY=your_key`
+```python
+allow_origins=[
+    "http://localhost:3000",
+    "https://your-frontend.vercel.app",
+]
+```
 
-### Option 3: Full Stack on Vercel (Experimental)
-
-Vercel supports Python, but for production, separate frontend/backend is recommended.
+Commit and push - Railway/Render will auto-redeploy.
 
 ## Environment Variables
 
@@ -59,28 +62,3 @@ NEXT_PUBLIC_API_URL=https://your-backend-url.com
 ```
 GEMINI_API_KEY=your_gemini_api_key
 ```
-
-## Post-Deployment Checklist
-
-- [ ] Update CORS in backend to allow your frontend domain
-- [ ] Test login functionality
-- [ ] Test upload functionality
-- [ ] Verify API endpoints are accessible
-- [ ] Check environment variables are set correctly
-
-## CORS Update for Production
-
-Update `backend/main.py`:
-```python
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://your-frontend.vercel.app",  # Add your production URL
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
-

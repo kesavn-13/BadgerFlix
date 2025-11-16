@@ -1,6 +1,6 @@
-# LectureFlix Backend
+# BadgerFlix Backend
 
-FastAPI backend for LectureFlix.
+FastAPI backend for BadgerFlix.
 
 ## Setup
 
@@ -9,10 +9,9 @@ FastAPI backend for LectureFlix.
 pip install -r requirements.txt
 ```
 
-2. Set up environment variable:
-```bash
-# Create .env file with your OpenAI API key
-echo "OPENAI_API_KEY=your_key_here" > .env
+2. Create `.env` file:
+```
+GEMINI_API_KEY=your_api_key_here
 ```
 
 3. Run the server:
@@ -20,15 +19,6 @@ echo "OPENAI_API_KEY=your_key_here" > .env
 python main.py
 ```
 
-Or with uvicorn directly:
-```bash
-uvicorn main:app --reload --port 8000
-```
+Server runs on `http://localhost:8000`
 
-The API will be available at `http://localhost:8000`
-
-## API Documentation
-
-Once running, visit `http://localhost:8000/docs` for interactive API documentation.
-
-
+API documentation: `http://localhost:8000/docs`

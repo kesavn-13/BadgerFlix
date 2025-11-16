@@ -1,6 +1,6 @@
-# LectureFlix Frontend
+# BadgerFlix Frontend
 
-Next.js frontend for LectureFlix.
+Next.js frontend for BadgerFlix.
 
 ## Setup
 
@@ -9,19 +9,16 @@ Next.js frontend for LectureFlix.
 npm install
 ```
 
-2. Run the development server:
+2. Run development server:
 ```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:3000`
+App runs on `http://localhost:3000`
 
-## Environment Variables
+## Build
 
-Create a `.env.local` file if you need to change the API URL:
-
+```bash
+npm run build
+npm start
 ```
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-
-
